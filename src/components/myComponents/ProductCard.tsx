@@ -2,17 +2,50 @@ import { Product } from "@/services/productsAPI";
 import React from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
-// import { Card, CardHeader, CardBody, CardFooter, CardTitle, CardDescription } from "@shadcn/ui"; // Import ShadCN components
+import { useDispatch, useSelector } from "react-redux";
+import { addItemToCart, CartItem, removeItemFromCart, updateItemQuantity } from "@/store/slices/cartSlice";
+// import { RootState } from "@/store"; // Adjust import based on where your root state is defined
 
 interface ProductCardProps {
   product: Product;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state: any) => state.cart.items); // Access the cart items from Redux state
+
+  // Check if the product is already in the cart
+  const existingItem = cartItems.find((item:CartItem) => item.product_id === product.id);
+
+  const handleAddToCart = () => {
+    const newItem = {
+      product_id: product.id,
+      price: product.price,
+      quantity: 1,
+      suma: product.price, // initial suma (price * quantity)
+    };
+    dispatch(addItemToCart(newItem)); // Dispatch action to add item to cart
+  };
+
+  const handleRemoveFromCart = () => {
+    if (existingItem) {
+      dispatch(removeItemFromCart(product.id)); // Dispatch action to remove item from cart
+    }
+  };
+  const handleUpdateItemQuantity = (quantity:number) => {
+    if (existingItem) {
+      dispatch(updateItemQuantity({product_id: product.id, quantity})); // Dispatch action to remove item from cart
+    }
+  };
+
   return (
-    <Card className={`${(product.id % 2 == 0 )? 'bg-card' :'bg-card-secondary'} min-w-[170px] md:min-w-[350px] max-w-xs mx-auto shadow-none rounded-xl transition group min-h-[200px] md:min-h-[400px] relative overflow-hidden`}>
+    <Card
+      className={`${
+        product.id % 2 === 0 ? "bg-card" : "bg-card-secondary"
+      } min-w-[170px] md:min-w-[350px] max-w-xs mx-auto shadow-none rounded-xl transition group min-h-[200px] md:min-h-[400px] relative overflow-hidden`}
+    >
       {/* Card Header - Product Image */}
-      <CardHeader className="relative ">
+      <CardHeader className="relative">
         <img
           src={product.images[0]}
           alt={product.name}
@@ -31,19 +64,27 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </CardDescription>
       </CardContent>
 
-      {/* Card Footer - Optional Action Buttons */}
+      {/* Card Footer - Action Buttons */}
       <CardFooter className="flex justify-between items-center p-4">
-        {/* You can add buttons like Edit, Add to Cart here */}
-        <Button
-          onClick={() => {}}
-        >
-          Add to Cart
+        <Button onClick={handleAddToCart} disabled={!!existingItem}>
+          {existingItem ? "Added to Cart" : "Add to Cart"}
         </Button>
-        <Button
-          onClick={() => {}}
-        >
-          Edit
+
+        {existingItem && (
+          <Button onClick={handleRemoveFromCart}>
+            Remove from Cart
+          </Button>
+        )}
+         {existingItem && (
+          <>
+          <Button onClick={()=>handleUpdateItemQuantity(1)}>
+            +
+          </Button>
+          <Button onClick={()=>handleUpdateItemQuantity(-1)}>
+          -
         </Button>
+        </>
+        )}
       </CardFooter>
     </Card>
   );

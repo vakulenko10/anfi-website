@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { fetchProducts, Product } from '../../services/productsAPI';
 // import './pages/Shop/Shop.css';
 import ProductCard from './ProductCard';
-import { Card, CardContent, CardFooter, CardHeader } from '../ui/card';
-import { Button } from '../ui/button';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFetchedProducts } from '@/store/slices/productsSlice';
 
@@ -41,11 +39,6 @@ const Products: React.FC = () => {
           ))}
         </div>
       </div>
-      <Card className='bg-card-secondary'>
-        <CardHeader>card header</CardHeader>
-        <CardContent>card content</CardContent>
-        <CardFooter>card footer<Button>click me</Button></CardFooter>
-      </Card>
      
     </div>
   );
