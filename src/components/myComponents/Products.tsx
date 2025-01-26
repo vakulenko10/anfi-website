@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
 // import { AuthData } from '../auth/AuthWrapper';
-import { deleteProductById, fetchProducts, FormData, Product, updateProduct } from '../../services/productsAPI';
+import { fetchProducts, Product } from '../../services/productsAPI';
 // import './pages/Shop/Shop.css';
 import ProductCard from './ProductCard';
 import { Card, CardContent, CardFooter, CardHeader } from '../ui/card';
 import { Button } from '../ui/button';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFetchedProducts } from '@/store/slices/productsSlice';
 
 
 const Products: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(true);
-
-  const [localProducts, setLocalProducts] = useState<Product[] | null>(null);
+  const dispatch = useDispatch();
+  const products = useSelector((state: any) => state.products.items);
 
   const fetchProductsData = async () => {
     setLoading(true);
     const productsResponse = await fetchProducts();
     if (productsResponse) {
-      setLocalProducts(productsResponse);  
-      localStorage.setItem("products", JSON.stringify(productsResponse));
+      dispatch(setFetchedProducts(productsResponse));  
     } else {
       console.error('Failed to fetch products');
     }
@@ -28,15 +29,6 @@ const Products: React.FC = () => {
   useEffect(() => {
     fetchProductsData();
   }, []);
-
-//   useEffect(() => {
-//     const savedProducts = localStorage.getItem('products');
-//     if (savedProducts) {
-//       setLocalProducts(JSON.parse(savedProducts));
-//     }
-//     setLoading(false);
-//   }, []);
-
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -44,10 +36,7 @@ const Products: React.FC = () => {
 
       <div className='w-full h-fit'>
         <div className="flex flex-wrap relative">
-          {/* {filteredProducts && filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product}  />
-          ))} */}
-          {localProducts?.map((product) => (
+          {products?.map((product:Product) => (
             <ProductCard key={product.id} product={product}/>
           ))}
         </div>
