@@ -1,33 +1,22 @@
-import * as React from "react"
-import * as LabelPrimitive from "@radix-ui/react-label"
-import { Slot } from "@radix-ui/react-slot"
+import Cart from "@/components/myComponents/Cart";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
-  Controller,
-  useForm,
-  FormProvider,
-  ControllerProps,
-  FieldPath,
-  FieldValues,
-} from "react-hook-form"
-import { cn } from "@/lib/utils"
-import { Label } from "@/components/ui/label"
-import { FormControl, FormItem, FormLabel } from "@/components/ui/form"
-import { Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-
-const Form = FormProvider
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const Home = () => {
-  
   return (
     <div>
-      <Card>
-      Home
-      </Card>
+      <Card>Home</Card>
+      {/* <Cart/> */}
     </div>
-  )
-}
+  );
+};
 
-
-
-export default Home
+export default Home;

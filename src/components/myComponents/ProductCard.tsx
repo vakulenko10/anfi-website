@@ -8,6 +8,7 @@ import { addItemToCart, CartItem, removeItemFromCart, updateItemQuantity } from 
 
 interface ProductCardProps {
   product: Product;
+  
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
@@ -38,19 +39,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       dispatch(updateItemQuantity({ product_id: product.id, quantity })); // Dispatch action to remove item from cart
     }
   };
+  const handleUpdateItemQuantityNegative = (quantity: number) => {
+    if (existingItem ) {
+        existingItem.quantity == 0?dispatch(removeItemFromCart(product.id)):
+      dispatch(updateItemQuantity({ product_id: product.id, quantity })); // Dispatch action to remove item from cart
+    }
+    
+  };
 
   return (
     <Card
       className={`${
-        product.id % 2 === 0 ? "bg-card" : "bg-card-secondary"
-      } min-w-[170px] w-[300px] max-w-xs mx-auto rounded-xl border-none transition-transform duration-300 relative overflow-hidden grid grid-rows-[1fr_auto]`}
+        product.id % 2 === 0 ? "bg-card hover:bg-card/90" : "bg-card-secondary hover:bg-card-secondary/90"
+      } transition min-w-[170px] w-[300px] max-w-xs mx-auto rounded-xl border-none  duration-300 relative overflow-hidden grid grid-rows-[1fr_auto]`}
     >
-      {/* Card Header - Product Image */}
-      {/* <CardHeader className="relative w-full h-[200px] md:h-[250px] flex-shrink-0">
-        
-      </CardHeader> */}
-
-      {/* Card Body - Product Name, Price, and Description */}
       <CardContent className="p-4">
         <div className="flex flex-col sm:flex-row justify-between gap-3 sm:items-center relative h-full ">
           <div className="relative min-w-3/4 w-3/4 h-full rounded-xl">
@@ -84,13 +86,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
       {/* Card Footer - Action Buttons */}
       <CardFooter className="flex self-end justify-between items-center p-4 ">
-        <Button
-          onClick={handleAddToCart}
-          disabled={!!existingItem}
-          className="w-full sm:w-auto"
-        >
-          {existingItem ? "Added to Cart" : "Add to Cart"}
-        </Button>
+       {existingItem ? '' : 
+          <Button
+            onClick={handleAddToCart}
+            disabled={!!existingItem}
+            className="w-full sm:w-auto"
+          >
+            Add to cart
+          </Button>}
 
         {existingItem && (
           <Button
@@ -109,7 +112,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               +
             </Button>
             <Button
-              onClick={() => handleUpdateItemQuantity(-1)}
+              onClick={() => handleUpdateItemQuantityNegative(-1)}
               className="w-8 sm:w-auto mt-2 sm:mt-0"
             >
               -

@@ -51,7 +51,7 @@ export const LoginForm : React.FC<LoginFormProps> = ({className}) => {
             // If the response is successful, navigate to the profile page
             if (response) {
               console.log(response)
-              navigate("/profile"); // Redirect only if login is successful
+              navigate("/dashboard"); // Redirect only if login is successful
             } else {
               throw new Error("Invalid login credentials.");
             }
@@ -75,7 +75,7 @@ export const LoginForm : React.FC<LoginFormProps> = ({className}) => {
             <FormItem>
               <FormLabel className="text-primary-foreground">Username</FormLabel>
               <FormControl>
-                <Input placeholder="username" {...field} className="text-black border-none focus:border-none shadow-none" />
+                <Input placeholder="username" {...field} className="text-black border-black focus:border-none shadow-none" />
               </FormControl>
               <FormDescription>
                 This is your public display name.
@@ -89,9 +89,9 @@ export const LoginForm : React.FC<LoginFormProps> = ({className}) => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>email</FormLabel>
+              <FormLabel className="text-primary-foreground">email</FormLabel>
               <FormControl>
-                <Input placeholder="email" {...field} />
+                <Input placeholder="email" {...field} className="text-black border-black focus:border-none shadow-none" />
               </FormControl>
               <FormDescription>
                 This is your public email.
@@ -106,9 +106,9 @@ export const LoginForm : React.FC<LoginFormProps> = ({className}) => {
         //   type="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>password</FormLabel>
+              <FormLabel className="text-primary-foreground">password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="password" {...field} />
+                <Input type="password" placeholder="password" {...field} className="text-black border-black focus:border-none shadow-none" />
               </FormControl>
               <FormDescription>
                 This is your password.
@@ -118,6 +118,7 @@ export const LoginForm : React.FC<LoginFormProps> = ({className}) => {
           )}
         />
         <Button type="submit">Submit</Button>
+        {errorMessage&&<p>{errorMessage}</p>}
       </form>
     </Form>
   )

@@ -18,7 +18,7 @@ const CartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    setFetchedCart: (state, action: PayloadAction<CartState>) => {
+    setFetchedCart: (state, action: PayloadAction<CartState >) => {
       state = action.payload;
       localStorage.setItem('cart', JSON.stringify(action.payload));
       console.log('Cart state has been fetched and set');

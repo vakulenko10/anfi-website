@@ -1,11 +1,11 @@
 import { Product } from '@/services/productsAPI';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface ProductsState {
+export interface ProductsState {
   items: Product[],
 }
 
-const initialState: ProductsState = {
+export const initialState: ProductsState = {
   items: JSON.parse(localStorage.getItem('products') || '[]') as Product[],
 };
 

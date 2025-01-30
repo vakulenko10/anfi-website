@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body *{
+body * {
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -15,6 +15,22 @@ body{
   max-width: 75rem;
   margin: 0 auto;
   padding: var(--spacing-md);
+}
+.custom-scrollbar {
+  overflow-y: scroll; /* Ensure that scrolling is enabled */
+  scrollbar-width: none; /* For Firefox */
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 0px; /* No width for the scrollbar */
+  height: 0px; /* Hide horizontal scrollbar if any */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Make the scrollbar thumb invisible */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; /* Make the track invisible */
 }
 @layer base {
   :root {
