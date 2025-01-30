@@ -33,7 +33,7 @@ const Products: React.FC = () => {
     <div className=" w-full relative py-8 pt-[100px]">
 
       <div className='w-full h-fit'>
-        <div className="flex flex-wrap relative">
+        <div className="grid grid-cols-3 gap-2 justify-between overflow-hidden relative">
           {products?.map((product:Product) => (
             <ProductCard key={product.id} product={product}/>
           ))}

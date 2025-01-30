@@ -15,7 +15,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const cartItems = useSelector((state: any) => state.cart.items); // Access the cart items from Redux state
 
   // Check if the product is already in the cart
-  const existingItem = cartItems.find((item:CartItem) => item.product_id === product.id);
+  const existingItem = cartItems.find((item: CartItem) => item.product_id === product.id);
 
   const handleAddToCart = () => {
     const newItem = {
@@ -32,9 +32,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       dispatch(removeItemFromCart(product.id)); // Dispatch action to remove item from cart
     }
   };
-  const handleUpdateItemQuantity = (quantity:number) => {
+
+  const handleUpdateItemQuantity = (quantity: number) => {
     if (existingItem) {
-      dispatch(updateItemQuantity({product_id: product.id, quantity})); // Dispatch action to remove item from cart
+      dispatch(updateItemQuantity({ product_id: product.id, quantity })); // Dispatch action to remove item from cart
     }
   };
 
@@ -42,48 +43,78 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     <Card
       className={`${
         product.id % 2 === 0 ? "bg-card" : "bg-card-secondary"
-      } min-w-[170px] md:min-w-[350px] max-w-xs mx-auto shadow-none rounded-xl transition group min-h-[200px] md:min-h-[400px] relative overflow-hidden`}
+      } min-w-[170px] w-[300px] max-w-xs mx-auto rounded-xl border-none transition-transform duration-300 relative overflow-hidden grid grid-rows-[1fr_auto]`}
     >
       {/* Card Header - Product Image */}
-      <CardHeader className="relative">
-        <img
-          src={product.images[0]}
-          alt={product.name}
-          className="w-full h-full object-cover object-center rounded-t-xl group-hover:scale-105 transition-all"
-        />
-      </CardHeader>
+      {/* <CardHeader className="relative w-full h-[200px] md:h-[250px] flex-shrink-0">
+        
+      </CardHeader> */}
 
       {/* Card Body - Product Name, Price, and Description */}
       <CardContent className="p-4">
-        <CardTitle className="text-text1 font-serif text-xs">{product.name}</CardTitle>
-        <div className="flex justify-between items-center">
-          <span className="text-text1 font-bold">${product.price}</span>
+        <div className="flex flex-col sm:flex-row justify-between gap-3 sm:items-center relative h-full ">
+          <div className="relative min-w-3/4 w-3/4 h-full rounded-xl">
+            <img
+              src={product.images[0]}
+              alt={product.name}
+              className="w-full h-full object-contain scale-150 object-center transition-all"
+            />
+          </div>
+          <div className="flex flex-col self-start justify-center items-start">
+            <CardTitle className="text-text1 font-serif text-sm md:text-base text-start">
+              <h2 className="text-lg m-0">{product.name}</h2>
+            </CardTitle>
+            <CardDescription className="relative text-text1 text-xs font-serif mt-1  flex flex-col">
+              <h5 className="text-sm m-0 text-start">
+                Status: {product.status}
+              </h5>
+              <h5 className="font-serif font-bold text-lg m-0 text-start">
+                ${product.price}
+              </h5>
+              <p className=" m-0 text-start">
+                {product.description.slice(0, 50)}...
+              </p>
+            </CardDescription>
+          </div>
+          {/* <div className="flex justify-between items-center mt-2 sm:mt-0">
+            <span className="text-text1 font-bold text-lg">${product.price}</span>
+          </div> */}
         </div>
-        <CardDescription className="text-text1 text-xs font-serif mt-2">
-          Status: {product.status}
-        </CardDescription>
       </CardContent>
 
       {/* Card Footer - Action Buttons */}
-      <CardFooter className="flex justify-between items-center p-4">
-        <Button onClick={handleAddToCart} disabled={!!existingItem}>
+      <CardFooter className="flex self-end justify-between items-center p-4 ">
+        <Button
+          onClick={handleAddToCart}
+          disabled={!!existingItem}
+          className="w-full sm:w-auto"
+        >
           {existingItem ? "Added to Cart" : "Add to Cart"}
         </Button>
 
         {existingItem && (
-          <Button onClick={handleRemoveFromCart}>
+          <Button
+            onClick={handleRemoveFromCart}
+            className="w-full sm:w-auto mt-2 sm:mt-0"
+          >
             Remove from Cart
           </Button>
         )}
-         {existingItem && (
+        {existingItem && (
           <>
-          <Button onClick={()=>handleUpdateItemQuantity(1)}>
-            +
-          </Button>
-          <Button onClick={()=>handleUpdateItemQuantity(-1)}>
-          -
-        </Button>
-        </>
+            <Button
+              onClick={() => handleUpdateItemQuantity(1)}
+              className="w-8 sm:w-auto mt-2 sm:mt-0"
+            >
+              +
+            </Button>
+            <Button
+              onClick={() => handleUpdateItemQuantity(-1)}
+              className="w-8 sm:w-auto mt-2 sm:mt-0"
+            >
+              -
+            </Button>
+          </>
         )}
       </CardFooter>
     </Card>
