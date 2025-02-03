@@ -4,9 +4,21 @@ import { nav, NavItem } from "./navigation";
 import Container from "../components/myComponents/Container";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { autoLoginUser, UserState } from "@/store/slices/AuthSlice";
+import { autoLoginUser, logout, UserState } from "@/store/slices/AuthSlice";
 import { AppDispatch, RootState } from "@/store";
 import Cookies from "js-cookie";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "@/components/ui/alert-dialog"
+  import { Button } from "@/components/ui/button"
 // import { motion, useMotionValue, useTransform } from "framer-motion";
 // Component to render routes based on authentication
 export const RenderRoutes = () => {
@@ -48,7 +60,7 @@ type RenderHeaderProps = {
 };
 
 const RenderHeader: React.FC = () => {
-
+    const dispatch = useDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState(true);
   const handleHeaderItemClick = () => {
@@ -93,16 +105,21 @@ const RenderHeader: React.FC = () => {
     useEffect(() => {
         return () => document.body.classList.remove("no-scroll");
     }, []);
+
+    const handleLogout = () =>{
+        dispatch(logout())
+    }
+       
   const HeaderItem = ({ r }: { r: NavItem }) => (
     <Link
       to={r.path}
-      className="block py-2 pr-4 pl-3 text-text1 rounded md:bg-transparent md:p-0 md:hover:bg-transparent"
+      className="block py-2 pr-4 pl-3 text-primary rounded md:bg-transparent md:p-0 md:hover:bg-transparent"
       onClick={handleHeaderItemClick}
     >
       {r.name}
     </Link>
   );
-
+  
   return (
     <header className={`${isVisible?'fixed':'hidden'} top-0 left-0 right-0 z-50 bg-background-secondary *:text-white shadow-md`}>
        <Container>
@@ -112,7 +129,7 @@ const RenderHeader: React.FC = () => {
                             anfi handmade
                         </Link>
                     </div>
-                    <nav className="hidden md:flex md:items-center md:gap-8 *:text-primary">
+                    <nav className="hidden md:flex md:items-center md:gap-8 text-primary">
                         {nav.map((r, i) => {
                             if (!r.isPrivate && r.isMenu) {
                                 return <HeaderItem key={i} r={r} />;
@@ -122,14 +139,25 @@ const RenderHeader: React.FC = () => {
                             return null;
                         })}
                         {user.isAuthenticated ? (
-                            <button
-                                // onClick={logout}
-                                className="text-text1 hover:text-red-600 dark:hover:text-red-500"
-                            >
-                                Log out
-                            </button>
+                            <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button>Log out</Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                              <AlertDialogTitle>Are you sure that you want to log out?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        To access the dashboard panel you will be required to log in again.
+                                    </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel variant={'accent'} >Cancel</AlertDialogCancel>
+                                <AlertDialogAction className="text-black" onClick={handleLogout}>Log out</AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         ) : (
-                            <Link to="login" className="text-text1 hover:underline">
+                            <Link to="login" className="text-primary hover:underline">
                                 Log in
                             </Link>
                         )}
@@ -172,16 +200,28 @@ const RenderHeader: React.FC = () => {
                                 return null;
                             })}
                             {user.isAuthenticated ? (
-                                <button
-                                    // onClick={handleLogout}
-                                    className="block w-full text-left py-2 px-3 text-text1"
-                                >
-                                    Log out
-                                </button>
+                                <AlertDialog>
+                                <AlertDialogTrigger>
+                                  <Button className="text-black">Log out</Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you sure that you want to log out?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        To access the dashboard panel you will be required to log in again.
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel variant={'accent'} >Cancel</AlertDialogCancel>
+                                    <AlertDialogAction className="text-black" onClick={handleLogout}>log out</AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
+                                
                             ) : (
                                 <Link
                                     to="login"
-                                    className="block w-full text-left py-2 px-3 text-text1"
+                                    className="block w-full text-left py-2 px-3 text-primary"
                                     onClick={handleHeaderItemClick}
                                 >
                                     Log in

@@ -58,7 +58,15 @@ export const autoLoginUser = createAsyncThunk<UserState | undefined, string>(
 const AuthSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state, action: PayloadAction)=>{
+      state.user = {username: '', isAdmin: false, isAuthenticated: false}
+      state.token = ''
+      state.refresh_token = ''
+      Cookies.set('access_token', '')
+      Cookies.set('refresh_token', '')
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, (state) => {
@@ -88,4 +96,5 @@ const AuthSlice = createSlice({
   },
 });
 
+export const {logout} = AuthSlice.actions;
 export default AuthSlice.reducer;
