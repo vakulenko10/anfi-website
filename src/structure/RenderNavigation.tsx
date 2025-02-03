@@ -3,15 +3,30 @@ import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { nav, NavItem } from "./navigation";
 import Container from "../components/myComponents/Container";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { UserState } from "@/store/slices/AuthSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { autoLoginUser, UserState } from "@/store/slices/AuthSlice";
+import { AppDispatch, RootState } from "@/store";
+import Cookies from "js-cookie";
 // import { motion, useMotionValue, useTransform } from "framer-motion";
 // Component to render routes based on authentication
 export const RenderRoutes = () => {
     // const { user } = AuthData();
+    const userState = useSelector((state:RootState)=>state.user);
+    const userS : UserState = userState;
+    const user = userS.user;
+    const token : string | undefined = Cookies.get('access_token');
+    console.log('token', token)
+    const dispatch = useDispatch<AppDispatch>()
+    useEffect(()=>{
+        if(token){
+            dispatch(autoLoginUser(token)) 
+        }
+        console.log('user after auto login:', user)
+    }, [])
 
-    const user = useSelector((state:UserState)=>state.user);
+    
 
+    console.log('user logged in render routes:', user)
     return (
         <Routes>
             {nav.map((r, i) => {
@@ -41,8 +56,9 @@ const RenderHeader: React.FC = () => {
     document.body.classList.remove("no-scroll");
     setIsMenuOpen(false);
   };
-  const user = useSelector((state:UserState)=> state.user)
-
+  const userState = useSelector((state:RootState)=>state.user);
+  const userS : UserState = userState;
+  const user = userS.user;
   useEffect(() => {
     let lastScrollY = window.scrollY;
     const handleScroll = () => {
@@ -64,8 +80,10 @@ const RenderHeader: React.FC = () => {
             
             if (isOpen) {
                 document.body.classList.add("no-scroll");
+                document.body.classList.add('open')
             } else {
                 document.body.classList.remove("no-scroll");
+                document.body.classList.remove("open");
             }
             
             return isOpen;
@@ -86,15 +104,15 @@ const RenderHeader: React.FC = () => {
   );
 
   return (
-    <header  className={`${isVisible?'fixed':'hidden'}  top-0 left-0 right-0 z-50 bg-text3 shadow-md`}>
+    <header className={`${isVisible?'fixed':'hidden'} top-0 left-0 right-0 z-50 bg-background-secondary *:text-white shadow-md`}>
        <Container>
                 <div className="flex justify-between items-center mx-auto max-w-screen-lg ">
                     <div className="flex items-center">
-                        <Link to="/" className="text-xl font-semibold font-serif text-text1">
+                        <Link to="/" className="text-xl font-semibold font-serif text-primary">
                             anfi handmade
                         </Link>
                     </div>
-                    <nav className="hidden md:flex md:items-center md:gap-8">
+                    <nav className="hidden md:flex md:items-center md:gap-8 *:text-primary">
                         {nav.map((r, i) => {
                             if (!r.isPrivate && r.isMenu) {
                                 return <HeaderItem key={i} r={r} />;

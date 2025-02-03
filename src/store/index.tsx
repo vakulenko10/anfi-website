@@ -5,11 +5,12 @@ import cartReducer from './slices/cartSlice';
 import authReducer from './slices/AuthSlice'
 const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    counter: counterReducer,  
     products: productsReducer, 
     cart: cartReducer, 
     user: authReducer
   },
 });
+export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch; // Export the dispatch type
 export default store;

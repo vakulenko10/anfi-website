@@ -31,6 +31,7 @@ export const signup = async (attributtes:UserCredentials) => {
   
 export const login = async (attributtes:UserCredentials) =>{
   const {username, password, email} = attributtes;
+  console.log('attributes:', username, password, email)
     try {
         const response = await fetch(`${API_BASE_URL}/login`, {
           method: 'POST',
@@ -46,13 +47,10 @@ export const login = async (attributtes:UserCredentials) =>{
         });
   
         const data = await response.json();
+        console.log('response in login api func:', data)
         if (response.ok) {
-        //   setToken(data.access_token)
-          // localStorage.setItem('jwt', data.access_token); // Store JWT in localStorage
-        //   console.log("Login successful", "JWT token:", data.access_token);
-  
-        //   // Check if the user is admin from the response data
-        const isAdmin = data.role === 'admin'; // Adjust based on your API response structure
+        
+        const isAdmin = data.role == 'admin'; // Adjust based on your API response structure
   
         //   setUser({ name: data.name || username, isAuthenticated: true, isAdmin: isAdmin});
         return {user:{username: data.name || username, isAuthenticated: true, isAdmin: isAdmin}, token: data.access_token, refresh_token: data.refresh_token}

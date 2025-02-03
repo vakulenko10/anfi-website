@@ -1,6 +1,7 @@
+
 import Pages from '../components/pages/index';
 
-const {Home, Login, Shop} = Pages;
+const {Home, Login, Shop, Dashboard} = Pages;
 
 export type NavItem = {
     path: string;
@@ -15,7 +16,7 @@ export type NavItem = {
 export const nav : NavItem[]= [
     { path:     "/",         name: "Home",        element: <Home />,       isMenu: true,     isPrivate: false  },
     { path:     "/login",    name: "Login",       element: <Login />,      isMenu: false,    isPrivate: false  },
-    // { path:     "/profile",  name: "Profile",     element: <Profile />,    isMenu: true,     isPrivate: true  },
+    { path:     "/dashboard",  name: "Dashboard",     element: <Dashboard />,    isMenu: true,     isPrivate: true  },
     // { path: "/signup", name: "Sign up", element: <Signup/>, isMenu: false, isPrivate: false},
     // { path:     "/orders",  name: "Orders",     element: <Orders />,    isMenu: true,     isPrivate: true  },
     { path:     "/shop",  name: "Shop",     element: <Shop />,    isMenu: true,     isPrivate: false  },
